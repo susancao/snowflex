@@ -74,11 +74,11 @@ defmodule Snowflex do
   def string_param(val, length \\ 250), do: {{:sql_varchar, length}, val}
 
   def unicode_string_param(value) do
-    case :unicode.characters_to_binary(value, :unicode, {:utf16, :little}) do
-      utf16 when is_bitstring(utf16) ->
+    case :unicode.characters_to_binary(value, :unicode, {:utf16, :big}) do
+      utf16_be when is_bitstring(utf16_be) ->
         # {{:sql_wvarchar, byte_size(utf16)}, [value]} # utf-8 version
         # {{:sql_wvarchar, byte_size(value)}, [utf16]} # original
-        {{:sql_wvarchar, byte_size(utf16)}, [utf16]} # attempt to make utf16 work
+        {{:sql_wvarchar, byte_size(utf16_be)}, [utf16_be]} # attempt to make utf16 work
 
       _ ->
         raise "Snowflex failed to convert string to UTF16LE: #{value}"
