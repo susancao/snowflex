@@ -77,7 +77,8 @@ defmodule Snowflex do
     case :unicode.characters_to_binary(value, :unicode, {:utf16, :little}) do
       utf16 when is_bitstring(utf16) ->
         # {{:sql_wvarchar, byte_size(utf16)}, [value]} # utf-8 version
-        {{:sql_wvarchar, byte_size(value)}, [utf16]} # original - works for utf-16
+        # {{:sql_wvarchar, byte_size(value)}, [utf16]} # original - works for utf-16
+        {{:sql_wvarchar, byte_size(utf16)}, [utf16]} # attempt to make it work with linux
 
       _ ->
         raise "Snowflex failed to convert string to UTF16LE: #{value}"
