@@ -15,6 +15,11 @@ defmodule Snowflex.Params do
     Enum.map(params, &prepare_param/1)
   end
 
+  def prepare_param({{:sql_wvarchar, length}, [utf16_binary]}) when is_binary(utf16_binary) do
+  # Don't convert UTF-16 binaries to charlist - pass through as-is
+    {{:sql_wvarchar, length}, [utf16_binary]}
+  end
+
   def prepare_param({type, values}) when not is_list(values) do
     prepare_param({type, [values]})
   end
